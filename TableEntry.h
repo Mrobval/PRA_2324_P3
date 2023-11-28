@@ -30,15 +30,6 @@ class TableEntry {
 		out << te.key << te.value;
 		return out;
 	};
-	/*void insert(std::string key, V value) override{
-
-	};
-	V search(std::string key) override{
-	};
-	V remove(std::string key) override{
-	};
-	int entries() override{
-	};*/
 };
 
 #endif
