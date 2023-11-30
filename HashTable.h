@@ -32,7 +32,7 @@ class HashTable: public Dict<V> {
 			return out;
 		};
 		V operator[](std::string key){
-			if (ListLinked::search(key) != nullptr){
+			if (ListLinked::int search(key) != nullptr){
 				return value;
 			}else{
 				throw std::runtime_error("No existe la clave");
@@ -42,7 +42,7 @@ class HashTable: public Dict<V> {
 			int i=0;
 			while (i < capacity()){
 				table[i];
-				if(ListLinked::search(key) != nullptr){
+				if(ListLinked::int search(key) != nullptr){
 					throw std::runtime_error("Ya exite la clave");
 				}
 				else{
@@ -58,7 +58,7 @@ class HashTable: public Dict<V> {
 		};
 		V search(std::string key) override{
 			for (int i=0; i<capacity(); i++){
-				if (ListLinked::search(key)){
+				if (ListLinked::int search(key)){
 					return e.value;
 				}
 			}
@@ -68,7 +68,7 @@ class HashTable: public Dict<V> {
 			int i=0;
 			while (i < capacity()){
 				table[i];
-				if (ListLinked::search(key) != nullptr){
+				if (ListLinked::int search(key) != nullptr){
 					ListLinked::T remove(i);
 				}
 				i++;
