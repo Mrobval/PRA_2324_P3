@@ -1,4 +1,4 @@
-#ifdef HASHTABLE_H
+#ifndef HASHTABLE_H
 #define HASHTABLE_H
 
 #include <ostream>
@@ -14,64 +14,66 @@ class HashTable: public Dict<V> {
 		int n;
 		int max;
 		ListLinked<TableEntry<V>>*table;
-		int h(std::string key);
+		int h(std::string key){
+			int sum = 0;
+			for (size_t i=0; i<key.length(); i++) {
+				sum += static_cast<int>(key.at(i));  // Suma los valores ASCII numéricos de los caracteres
+			}
+			return sum % max;  // Devuelve el resto de la división entre la suma y el tamaño de la tabla
+    		};
 	public:
-		Hastable(int size){
-			int table = int new[size];
+		HashTable(int size){
+			table = new ListLinked<TableEntry<V>>[size];
 			int n = 0;
 			int max = size;
 		};
-		~Hastable(){
+		~HashTable(){
 			delete[] table;
 		};
 		int capacity(){
 			return max;
 		};
-		friend std::ostream&operator>>(std::ostream &out, const Hastable<V> &th){
+		friend std::ostream&operator>>(std::ostream &out, const HashTable<V> &th){
 			out << th.key << th.value;
 			return out;
 		};
 		V operator[](std::string key){
-			if (ListLinked::int search(key) != nullptr){
-				return value;
-			}else{
-				throw std::runtime_error("No existe la clave");
+			for (int i=0; i < capacity(); i++){
+				if (ListLinked<TableEntry<V>>::search(table[i], key) != nullptr){
+					return ListLinked<TableEntry<V>>::search(table[i], key)->value;
+				}else{
+					throw std::runtime_error("No existe la clave");
+				}
 			}
 		};
 		void insert(std::string key, V value) override{
-			int i=0;
-			while (i < capacity()){
-				table[i];
-				if(ListLinked::int search(key) != nullptr){
+			int index = h(key);
+			for (int i=0; i < capacity(); i++){
+				if(ListLinked<TableEntry<V>>::search(table[i], key) != nullptr){
 					throw std::runtime_error("Ya exite la clave");
 				}
 				else{
-					ListLinked::void insert(table[i], key);
+					ListLinked<TableEntry<V>>::insert(table[i], key);
 					n++;	
 				}
-				i++;
 			}
-			/*if(search(key)){
-				throw std::runtime_error("La clave ya existe");
-			}
-			TableEntry<int> */
 		};
 		V search(std::string key) override{
+			int index = h(key);
 			for (int i=0; i<capacity(); i++){
-				if (ListLinked::int search(key)){
-					return e.value;
+				if (ListLinked<TableEntry<V>>::search(table[i], key)){
+					return ListLinked<TableEntry<V>>::search(table[i], key)->value;
 				}
 			}
 			throw std::runtime_error("La clave no se encuentra");
 		};
 		V remove(std::string key) override{
-			int i=0;
-			while (i < capacity()){
-				table[i];
-				if (ListLinked::int search(key) != nullptr){
-					ListLinked::T remove(i);
+			int index = h(key);
+			for (int i=0; i < capacity(); i++){
+				if (ListLinked<TableEntry<V>>::search(table[i], key) != nullptr){
+					ListLinked<TableEntry<V>>::remove(table[i]);
 				}
-				i++;
+				n--;
 			}
 			throw std::runtime_error("No existe esa clave");
 		};
