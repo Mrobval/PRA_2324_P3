@@ -23,9 +23,12 @@ class HashTable: public Dict<V> {
     		};
 	public:
 		HashTable(int size){
-			table = new ListLinked<TableEntry<V>>[size];
-			int n = 0;
-			int max = size;
+			//table = new ListLinked<TableEntry<V>>[size];
+			for (int i=0; i < size; i++){
+				table[i] = ListLinked<TableEntry<V>>();
+			}
+			n = 0;
+			max = size;
 		};
 		~HashTable(){
 			delete[] table;
@@ -33,7 +36,7 @@ class HashTable: public Dict<V> {
 		int capacity(){
 			return max;
 		};
-		friend std::ostream&operator>>(std::ostream &out, const HashTable<V> &th){
+		friend std::ostream&operator<<(std::ostream &out, const HashTable<V> &th){
 			out << th.key << th.value;
 			return out;
 		};
@@ -68,8 +71,8 @@ class HashTable: public Dict<V> {
 			throw std::runtime_error("La clave no se encuentra");
 		};
 		V remove(std::string key) override{
-			int index = h(key);
 			for (int i=0; i < capacity(); i++){
+				int index = h(key);
 				if (ListLinked<TableEntry<V>>::search(table[i], key) != nullptr){
 					ListLinked<TableEntry<V>>::remove(table[i]);
 				}
