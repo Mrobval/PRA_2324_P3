@@ -33,54 +33,47 @@ class HashTable: public Dict<V> {
 		~HashTable(){
 			delete[] table;
 		};
-		int capacity(){
+		int capacity() const{
 			return max;
 		};
 		friend std::ostream&operator<<(std::ostream &out, const HashTable<V> &th){
-			out << th.key << th.value;
+			out << th; //Sólo hace la primera cubeta?? Hay que hacer un bucle para recoger toda la tabla??
 			return out;
 		};
 		V operator[](std::string key){
-			for (int i=0; i < capacity(); i++){
-				if (ListLinked<TableEntry<V>>::search(table[i], key) != nullptr){
-					return ListLinked<TableEntry<V>>::search(table[i], key)->value;
-				}else{
-					throw std::runtime_error("No existe la clave");
-				}
+			if(!search(key)){
+				throw std::runtime_error("La clave no se encuentra");
 			}
+			std::ostream&operator<<(std::ostream &out, const TableEntry<V> &key);
 		};
 		void insert(std::string key, V value) override{
 			int index = h(key);
-			for (int i=0; i < capacity(); i++){
-				if(ListLinked<TableEntry<V>>::search(table[i], key) != nullptr){
-					throw std::runtime_error("Ya exite la clave");
-				}
-				else{
-					ListLinked<TableEntry<V>>::insert(table[i], key);
-					n++;	
-				}
+			if (search(key)){
+				throw std::runtime_error("La clave ya existe");
 			}
+			table(index).prepend(key);
 		};
 		V search(std::string key) override{
 			int index = h(key);
-			for (int i=0; i<capacity(); i++){
-				if (ListLinked<TableEntry<V>>::search(table[i], key)){
-					return ListLinked<TableEntry<V>>::search(table[i], key)->value;
+			int position = table(index).search(key);
+			if (position){
+				char elemento = table(index).get(position);
+				if (elemento){
+					std::ostream& operator<<(std::ostream &out, const TableEntry<V> &elemento);
 				}
+				
 			}
 			throw std::runtime_error("La clave no se encuentra");
 		};
 		V remove(std::string key) override{
-			for (int i=0; i < capacity(); i++){
-				int index = h(key);
-				if (ListLinked<TableEntry<V>>::search(table[i], key) != nullptr){
-					ListLinked<TableEntry<V>>::remove(table[i]);
-				}
-				n--;
+			int index = h(key);
+			if (!search(key)){
+				throw std::runtime_error("No se ha encontrado la calve que buscas");
 			}
-			throw std::runtime_error("No existe esa clave");
+			int position = table(index).search(key);
+			table(index).remove(position);
 		};
-		int entries() override{
+		int entries() const{
 			return n;
 		};
 };
