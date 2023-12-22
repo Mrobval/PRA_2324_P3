@@ -23,10 +23,10 @@ class HashTable: public Dict<V> {
     		};
 	public:
 		HashTable(int size){
-			//table = new ListLinked<TableEntry<V>>[size];
-			for (int i=0; i < size; i++){
-				table[i] = ListLinked<TableEntry<V>>();
-			}
+			table = new ListLinked<TableEntry<V>>[size];
+			/*for (int i=0; i < size; i++){
+				table[i] = new ListLinked<TableEntry<V>>();
+			}*/
 			n = 0;
 			max = size;
 		};
@@ -34,46 +34,62 @@ class HashTable: public Dict<V> {
 			delete[] table;
 		};
 		int capacity() const{
+			if (table == nullptr){
+				return 0;
+			}
 			return max;
 		};
 		friend std::ostream&operator<<(std::ostream &out, const HashTable<V> &th){
-			out << th; //Sólo hace la primera cubeta?? Hay que hacer un bucle para recoger toda la tabla??
+			for (int i=0; i<th.max; i++){
+				out<< "Cubeta "<< i<< ": "<< std::endl;
+				out<< th.table[i]<< std::endl;
+			}
 			return out;
 		};
 		V operator[](std::string key){
-			if(!search(key)){
+			int index = h(key);
+			int position = table[index].search(key);
+			if(position){			
+				//std::ostream&operator<<(std::ostream &out, const TableEntry<V> &key);
+				return table[index].get(position).value;
+			}else{
 				throw std::runtime_error("La clave no se encuentra");
 			}
-			std::ostream&operator<<(std::ostream &out, const TableEntry<V> &key);
 		};
 		void insert(std::string key, V value) override{
 			int index = h(key);
-			if (search(key)){
+			int position = table[index].search(key);
+			if (position == -1){
+				table[index].prepend(TableEntry<V>(key, value));
+				n++;
+			}else{
 				throw std::runtime_error("La clave ya existe");
 			}
-			table(index).prepend(key);
 		};
 		V search(std::string key) override{
 			int index = h(key);
-			int position = table(index).search(key);
-			if (position){
-				char elemento = table(index).get(position);
-				if (elemento){
-					std::ostream& operator<<(std::ostream &out, const TableEntry<V> &elemento);
-				}
+			int position = table[index].search(key);		
+			//std::cout<< "La posicion es: "<< position<< std::endl;
+			if (position > -1){
+				return table[index].get(position).value;
+				//std::ostream& operator<<(std::ostream &out, const TableEntry<V> &elem);
 				
+			}else{
+				throw std::runtime_error("La clave no se encuentra");
 			}
-			throw std::runtime_error("La clave no se encuentra");
 		};
 		V remove(std::string key) override{
 			int index = h(key);
-			if (!search(key)){
+			int position = table[index].search(key);
+			//std::cout<< "La posicion es: "<< position<< std::endl;
+			if (position > -1){
+				return table[index].remove(position).value;
+				n--;
+			}else{
 				throw std::runtime_error("No se ha encontrado la calve que buscas");
 			}
-			int position = table(index).search(key);
-			table(index).remove(position);
 		};
-		int entries() const{
+		int entries() const override{
 			return n;
 		};
 };
