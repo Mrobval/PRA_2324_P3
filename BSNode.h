@@ -10,13 +10,12 @@ class BSNode {
 	BSNode<T>* left;
 	BSNode<T>* right;
 	BSNode(T elem, BSNode<T>* left=nullptr, BSNode<T>* right=nullptr){
-		//elem = new BSNode<T>;
 		this->elem = elem;
 		this->left = left;
 		this->right = right;	
 	};
-	friend std::ostream& operator<<(std::ostream &out, const BSNode<T> &bsn){
-		out << bsn;
+	friend std::ostream&operator<<(std::ostream &out, const BSNode<T> &bsn){
+		out<< bsn.elem;
 		return out;
 	};
 };
