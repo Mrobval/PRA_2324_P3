@@ -47,7 +47,8 @@ class BSTreeDict: public Dict<V> {
 	};
 	V remove(std::string key) override{
 		if (tree->search(TableEntry<V>(key, V()))){
-			return tree->remove(TableEntry<V>(key, V())).value;
+			return tree->search(TableEntry<V>(key, V())).value;
+			tree->remove(TableEntry<V>(key, V()));
 		}else{
 			throw std::runtime_error("No se ha encontrado la calve que buscas");
 		}

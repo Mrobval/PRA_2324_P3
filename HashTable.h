@@ -24,9 +24,6 @@ class HashTable: public Dict<V> {
 	public:
 		HashTable(int size){
 			table = new ListLinked<TableEntry<V>>[size];
-			/*for (int i=0; i < size; i++){
-				table[i] = new ListLinked<TableEntry<V>>();
-			}*/
 			n = 0;
 			max = size;
 		};
