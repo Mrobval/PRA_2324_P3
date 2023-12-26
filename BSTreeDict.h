@@ -1,6 +1,7 @@
 #ifndef BSTREEDICT_H
 #define BSTREEDICT_H
 
+#include <iostream>
 #include <ostream>
 #include <stdexcept>
 #include "Dict.h"
@@ -38,19 +39,26 @@ class BSTreeDict: public Dict<V> {
 		}
 	};
 	V search(std::string key) override{
-		if (tree->search(TableEntry<V>(key,V()))){
+		//if (tree->search(TableEntry<V>(key,V()))){
+		try{
+			Dict.search(key);
 			return tree->search(TableEntry<V>(key, V())).value;
+			//return tree->search(TableEntry<V>(key, V())).value;
 		}
-		else{
-			throw std::runtime_error("No se encuentra la clave");
+		catch (std::runtime_error &e){
+			std::cout<< e.what()<< std::endl;
+		/*else{
+			throw std::runtime_error("No se encuentra la clave"); */
 		}
 	};
 	V remove(std::string key) override{
-		if (tree->search(TableEntry<V>(key, V()))){
+		try{
+			Dict.search(key);
 			return tree->search(TableEntry<V>(key, V())).value;
 			tree->remove(TableEntry<V>(key, V()));
-		}else{
-			throw std::runtime_error("No se ha encontrado la calve que buscas");
+		}
+		catch (std::runtime_error &e){
+			std::cout<< e.what()<< std::endl;
 		}
 	};
 	int entries() const override{
